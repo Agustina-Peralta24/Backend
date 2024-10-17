@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\js"
+    "\\js",
+    "\\php"
   ],
-  "SelectedNode": "\\index.html",
+  "SelectedNode": "\\stock.html",
   "PreviewInSolutionExplorer": false
 }

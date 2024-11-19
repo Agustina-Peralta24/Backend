@@ -1,95 +1,79 @@
-//controlador del modulo//
-const db =require("../db/db");
+// controllers/productos.controller.js
+const db = require("../db/db");
 
-//METODO GET//
-
-//para todos los productos
-const allProducts =(req,res) =>{
-    const sql="SELECT * FROM productos";
-    db.query(sql,(error,rows )=> {
-        if(error){
-            return res.status(500).json({error : "ERROR: Intente mas tarde por favor"});
+// Obtener todos los productos GET
+const getProductos = (req, res) => {
+    const sql = "SELECT * FROM productos";
+    db.query(sql, (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: "Error al obtener productos" });
         }
-        res.json(rows);
+        res.json(results);
     });
 };
 
-//para un producto
-const showProducts = (req,res) => {
-    const{id} = req.params;
-    const sql="SELECT * FROM productos WHERE id = ?";
-    db.query(sql,[id],(error,rows )=> {
-        console.log(rows);
-        if(error){
-            return res.status(500).json({error : "ERROR: Intente mas tarde por favor"});
+// Obtener un producto GET BY ID
+const getProductoById = (req, res) => {
+    const { id } = req.params;
+    const sql = "SELECT * FROM productos WHERE id_producto = ?";
+    db.query(sql, [id], (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: "Error al obtener el producto" });
         }
-        if(rows.length ==0){
-            return res.status(400).send({error :"ERROR: No existe el producto requerido"});
-        };
-
-        res.json(rows[0]); //me muestra el elemento en la posicion cero si existe
+        if (results.length === 0) {
+            return res.status(404).json({ error: "Producto no encontrado" });
+        }
+        res.json(results[0]);
     });
-
 };
 
-
-  //METODO POST///
-const storeProducts = (req, res) => {
-    const {nombre, descripcion, precio, categoria, disponible, fecha} = req.body;
-    const sql = "INSERT INTO productos (nombre, descripcion, precio, categoria, disponible, fecha) VALUES (?,?,?,?,?,?)";
-    db.query(sql,[nombre, descripcion, precio, categoria, disponible, fecha], (error, result) => {
-        console.log(result);
-        if(error){return res.status(500).json({error : "ERROR: Intente mas tarde por favor"});
-    }
-    const producto = {...req.body, id: result.insertId}; // ... reconstruir el objeto del body
-    res.status(201).json(producto); // muestra creado con exito el elemento
-});     
-
-};
-
-
-//// METODO PUT  ////
-const updateProductos = (req, res) => {
-    const {id} = req.params;
-    const {nombre, descripcion, precio, categoria, disponible, fecha} = req.body;
-    const sql ="UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, categoria = ?, disponible = ? , fecha = ?  WHERE id = ?";
-    db.query(sql,[nombre, descripcion, precio, categoria, disponible, fecha], (error, result) => {
-        console.log(result);
-        if (error){
-            return res.status(500).json({error : "ERROR: Intente mas tarde por favor"});
+// Crear un nuevo producto PUT
+const createProducto = (req, res) => {
+    const { nombre_producto, descripcion_producto, precio_producto, id_categoria, disponibilidad_producto } = req.body;
+    const sql = "INSERT INTO productos (nombre_producto, descripcion_producto, precio_producto, id_categoria, disponibilidad_producto) VALUES (?, ?, ?, ?, ?)";
+    db.query(sql, [nombre_producto, descripcion_producto, precio_producto, id_categoria, disponibilidad_producto], (error, result) => {
+        if (error) {
+            return res.status(500).json({ error: "Error al crear el producto" });
         }
-        if(result.affectedRows == 0){
-            return res.status(404).send({error : "ERROR: El producto a modificar no existe"});
-        };
-        
-        const producto = {...req.body, ...req.params}; // ... reconstruir el objeto del body
-
-        res.json(producto); // mostrar el elemento que existe
-    });     
+        res.status(201).json({ id_producto: result.insertId, nombre_producto, descripcion_producto, precio_producto, id_categoria, disponibilidad_producto });
+    });
 };
 
+// Actualizar un producto existente POST 
+const updateProducto = (req, res) => {
+    const { id } = req.params;
+    const { nombre_producto, descripcion_producto, precio_producto, id_categoria, disponibilidad_producto } = req.body;
+    const sql = "UPDATE productos SET nombre_producto = ?, descripcion_producto = ?, precio_producto = ?, id_categoria = ?, disponibilidad_producto = ? WHERE id_producto = ?";
+    db.query(sql, [nombre_producto, descripcion_producto, precio_producto, id_categoria, disponibilidad_producto, id], (error, result) => {
+        if (error) {
+            return res.status(500).json({ error: "Error al actualizar el producto" });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Producto no encontrado" });
+        }
+        res.json({ id_producto: id, nombre_producto, descripcion_producto, precio_producto, id_categoria, disponibilidad_producto });
+    });
+};
 
-//// METODO DELETE ////
-const destroyProducto = (req, res) => {
-    const {id} = req.params;
-    const sql = "DELETE FROM productos WHERE id = ?";
-    db.query(sql,[id], (error, result) => {
-        console.log(result);
-        if(error){
-            return res.status(500).json({error : "ERROR: Intente mas tarde por favor"});
-                    }
-                    if(result.affectedRows == 0){
-                        return res.status(404).send({error : "ERROR: El producto a borrar no existe"});
-                    };
-                    res.json({mensaje : "Producto eliminado"});
-                }); 
-            };
+// Eliminar un producto DELETE
+const deleteProducto = (req, res) => {
+    const { id } = req.params;
+    const sql = "DELETE FROM productos WHERE id_producto = ?";
+    db.query(sql, [id], (error, result) => {
+        if (error) {
+            return res.status(500).json({ error: "Error al eliminar el producto" });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Producto no encontrado" });
+        }
+        res.json({ message: "Producto eliminado correctamente" });
+    });
+};
 
-
-
-
-//exportar todas las funciones del modulo
-module.exports={ 
-    allProducts, showProducts, destroyProducto, updateProductos, storeProducts
-
+module.exports = {
+    getProductos,
+    getProductoById,
+    createProducto,
+    updateProducto,
+    deleteProducto
 };

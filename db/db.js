@@ -1,6 +1,6 @@
 const mysql = require("mysql2");
 
-//coneccion a bbdd//
+//conexion a bbdd//
 const connection =mysql.createConnection({
     host : "localhost",
     user : "root",

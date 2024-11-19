@@ -4,23 +4,22 @@ const router= express.Router();
 
 const controller =require("../Controller/productos.controller");
 
-//METODO GET//
-//para todos los productos//
-router.get('/',controller.allProducts);
+//METODO GET
+//para todos los productos
+router.get('/',controller.getProductos);
 
-//para un producto
-router.get('/:id',controller.showProducts);
+//METODO GET BY ID
+router.get('/:id',controller.getProductoById);
 
-//METODO POST//
-router.post('/', controller.storeProducts);
+//METODO POST
+router.post('/', controller.createProducto);
 
+// METODO PUT 
+router.put('/:id', controller.updateProducto);
 
-//// METODO PUT  ////
-router.put('/:id', controller.updateProductos);
+//METODO DELETE
+router.delete('/:id', controller.deleteProducto);
 
-
-///// METODO DELETE ////
-router.delete('/:id', controller.destroyProducto);
-
-//exportar las rutas,routers
+//Exporta las rutas
 module.exports= router;
+

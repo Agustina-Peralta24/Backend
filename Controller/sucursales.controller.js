@@ -49,7 +49,7 @@ const createSucursal = (req, res) => {
     });
 };
 
-// Actualizar una nueva sucursal PUT
+// Actualizar una sucursal PUT
 const updateSucursal = (req, res) => {
     const { nombre_sucursal, calle_sucursal, altura_sucursal, telefono_sucursal, email_sucursal } = req.body;
     

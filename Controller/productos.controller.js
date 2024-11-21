@@ -39,7 +39,7 @@ const createProducto = (req, res) => {
     });
 };
 
-// Actualizar un producto existente POST 
+// Actualizar un producto existente PUT 
 const updateProducto = (req, res) => {
     const { id } = req.params;
     const { nombre_producto, descripcion_producto, precio_producto, id_categoria, disponibilidad_producto } = req.body;

@@ -29,13 +29,20 @@ const getClienteById = (req, res) => {
 
 // Crear un nuevo cliente POST
 const createCliente = (req, res) => {
+    console.log(req.file);
+    let imageName = "";
+
+    if (req.file) {
+        imageName = req.file.filename;
+    };
+
     const { nombre_cliente, apellido_cliente, telefono_cliente, email_cliente } = req.body;
-    const sql = "INSERT INTO clientes (nombre_cliente, apellido_cliente, telefono_cliente, email_cliente) VALUES (?, ?, ?, ?)";
-    db.query(sql, [nombre_cliente, apellido_cliente, telefono_cliente, email_cliente], (error, result) => {
+    const sql = "INSERT INTO clientes (nombre_cliente, apellido_cliente, telefono_cliente, email_cliente, imagen) VALUES (?, ?, ?, ?, ?)";
+    db.query(sql, [nombre_cliente, apellido_cliente, telefono_cliente, email_cliente, imageName], (error, result) => {
         if (error) {
             return res.status(500).json({ error: "Error al crear el producto" });
         }
-        res.status(201).json({ id_cliente: result.insertId, nombre_cliente, apellido_cliente, telefono_cliente, email_cliente});
+        res.status(201).json({ id_cliente: result.insertId, nombre_cliente, apellido_cliente, telefono_cliente, email_cliente, imageName});
     });
 };
 

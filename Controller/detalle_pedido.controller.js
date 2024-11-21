@@ -1,5 +1,5 @@
 //controler/detallepedido.controller.js
-const db = require("../config/db"); 
+const db = require("../db/db"); 
 
 // Obtener todos los detalles de pedidos
 const getDetallePedido = (req, res) => {
@@ -27,7 +27,7 @@ const getDetallePedidoById = (req, res) => {
     });
 };
 
-// Crear un nuevo detalle de pedido
+// Crear un nuevo detalle de pedido POST
 const createDetallePedido = (req, res) => {
     const { id_pedido, id_producto, cantidad, total } = req.body;
     const sql = "INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, total) VALUES (?, ?, ?, ?)";
@@ -45,7 +45,7 @@ const createDetallePedido = (req, res) => {
     });
 };
 
-// Actualizar un detalle de pedido PUT , no deberia actualizar los id no?
+// Actualizar un detalle de pedido PUT 
 const updateDetallePedido = (req, res) => {
     const { id } = req.params;
     const { id_pedido, id_producto, cantidad, total } = req.body;

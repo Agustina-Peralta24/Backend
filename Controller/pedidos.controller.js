@@ -27,7 +27,7 @@ const getPedidosById = (req, res) => {
     });
 }; 
 
-// Crear un nuevo pedido POST ////fecha_pedido es timestamp, se pone acá?////
+// Crear un nuevo pedido POST
 const createPedido = (req, res) => {
     const { id_cliente, id_sucursal } = req.body;
     const sql = "INSERT INTO productos ( id_cliente, id_sucursal) VALUES (?, ?)";
@@ -39,7 +39,7 @@ const createPedido = (req, res) => {
     });
 };
 
-//////////// ACA TENGO DUDAS SOBRE EDITAR LOS PEDIDOS, va fecha? que modificaria sin romper todo? los id tmb? //////////// 
+
 // Actualizar un pedido existente PUT 
 const updatePedido = (req, res) => {
     const { id } = req.params;
